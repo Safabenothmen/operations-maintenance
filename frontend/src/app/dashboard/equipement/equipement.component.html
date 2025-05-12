@@ -1,0 +1,63 @@
+<div class="container mt-4">
+  <h2>Gestion des Équipements</h2>
+
+  <!-- Boutons pour afficher soit le formulaire, soit le tableau -->
+  <div class="mb-3">
+    <button class="btn btn-primary" (click)="showForm()">Ajouter un Équipement</button>
+    <button class="btn btn-secondary ms-2" (click)="showEquipments()">Afficher les Équipements</button>
+  </div>
+
+  <!-- Formulaire d'ajout d'équipement -->
+  <div *ngIf="isFormVisible">
+    <h3>Ajouter un Équipement</h3>
+    <form (ngSubmit)="onSubmit()" #formEquipement="ngForm">
+      <div class="form-group">
+        <label>Nom</label>
+        <input
+          type="text"
+          class="form-control"
+          name="nom"
+          [(ngModel)]="equipement.nom"
+          required
+        />
+      </div>
+
+      <div class="form-group mt-3">
+        <label>État</label>
+        <select
+          class="form-control"
+          name="etat"
+          [(ngModel)]="equipement.etat"
+          required
+        >
+          <option value="Fonctionnel">Fonctionnel</option>
+          <option value="en_panne">En panne</option>
+          <option value="en_maintenance">En maintenance</option>
+        </select>
+      </div>
+
+      <button class="btn btn-success mt-3" type="submit" [disabled]="formEquipement.invalid">
+        Ajouter
+      </button>
+    </form>
+  </div>
+
+  <!-- Tableau des équipements -->
+  <div *ngIf="!isFormVisible" class="mt-4">
+    <h3>Liste des Équipements</h3>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>État</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let equipement of equipements">
+          <td>{{ equipement.nom }}</td>
+          <td>{{ equipement.etat }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

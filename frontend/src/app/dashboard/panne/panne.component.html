@@ -1,0 +1,87 @@
+<div class="container mt-4">
+
+  <!-- Boutons pour basculer entre le formulaire et la liste -->
+  <div class="mb-3">
+    <button class="btn btn-primary me-2" (click)="affichage = 'ajouter'" [class.active]="affichage === 'ajouter'">
+      Signaler une Panne
+    </button>
+    <button class="btn btn-secondary" (click)="affichage = 'liste'" [class.active]="affichage === 'liste'">
+      Voir les Pannes
+    </button>
+  </div>
+
+  <!-- Formulaire d'ajout de panne -->
+  <div *ngIf="affichage === 'ajouter'" class="card mb-4">
+    <div class="card-header">
+      <h4>{{ panneToEdit ? 'Modifier la Panne' : 'Nouvelle Panne' }}</h4>
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label for="equipement" class="form-label">Équipement concerné</label>
+          <select class="form-select" [(ngModel)]="equipementId" name="equipement" required>
+            <option *ngFor="let equipement of equipements" [value]="equipement.id">
+              {{ equipement.nom }}
+            </option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="categorie" class="form-label">Catégorie</label>
+          <input type="text" class="form-control" [(ngModel)]="panne.categorie" name="categorie" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea class="form-control" [(ngModel)]="panne.description" name="description" rows="3" required></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="date_sign" class="form-label">Date de signalement</label>
+          <input type="date" class="form-control" [(ngModel)]="panne.date_sign" name="date_sign" required>
+        </div>
+
+        <button type="submit" class="btn btn-success">
+          {{ panneToEdit ? 'Modifier' : 'Soumettre' }}
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Liste des pannes -->
+  <div *ngIf="affichage === 'liste'" class="card">
+    <div class="card-header">
+      <h4>Liste des Pannes Signalées</h4>
+    </div>
+    <div class="card-body">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Équipement</th>
+            <th>Catégorie</th>
+            <th>Description</th>
+            <th>Date de signalement</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let panne of pannes">
+            <td>{{ panne.equipement?.nom || 'N/A' }}</td>
+            <td>{{ panne.categorie }}</td>
+            <td>{{ panne.description }}</td>
+            <td>{{ panne.date_sign | date: 'dd/MM/yyyy' }}</td>
+            <td>
+              <button class="btn btn-warning" (click)="chargerPannePourModification(panne)">
+                Modifier
+              </button>
+              <button class="btn btn-danger" (click)="supprimerPanne(panne.id)">
+                Supprimer
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

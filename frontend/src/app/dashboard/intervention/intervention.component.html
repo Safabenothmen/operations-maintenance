@@ -1,0 +1,163 @@
+<div class="container mt-4">
+  <!-- ADMIN VIEW -->
+  <div *ngIf="role === 'ADMIN'">
+    <div class="mb-3">
+      <button class="btn btn-primary me-2" (click)="affichage = 'ajouter'" [class.active]="affichage === 'ajouter'">
+        Ajouter une Intervention
+      </button>
+      <button class="btn btn-secondary" (click)="affichage = 'liste'" [class.active]="affichage === 'liste'">
+        Voir les Interventions
+      </button>
+    </div>
+
+    <!-- ADD/EDIT FORM -->
+    <div *ngIf="affichage === 'ajouter'" class="card mb-4">
+      <div class="card-header">
+        <h4>{{ interventionId ? 'Modifier' : 'Ajouter' }} une Intervention</h4>
+      </div>
+      <div class="card-body">
+        <form (ngSubmit)="onSubmit()">
+          <div class="mb-3">
+            <label for="equipement" class="form-label">Équipement</label>
+            <select class="form-select" [(ngModel)]="equipementId" name="equipement" required>
+              <option value="">Sélectionner un équipement</option>
+              <option *ngFor="let equipement of equipements" [value]="equipement.id">{{ equipement.nom }}</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="technicien" class="form-label">Technicien</label>
+            <select class="form-select" [(ngModel)]="technicienId" name="technicien" required>
+              <option value="">Sélectionner un technicien</option>
+              <option *ngFor="let technicien of techniciens" [value]="technicien.id">{{ technicien.nom }}</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="date" class="form-label">Date</label>
+            <input type="date" class="form-control" [(ngModel)]="intervention.date" name="date" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="cout" class="form-label">Coût (€)</label>
+            <input type="number" class="form-control" [(ngModel)]="intervention.cout" name="cout" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="statut" class="form-label">Statut</label>
+            <select class="form-select" [(ngModel)]="intervention.statut" name="statut" required>
+              <option value="Planifiee">Planifiée</option>
+              <option value="EnCours">En Cours</option>
+              <option value="Terminee">Terminée</option>
+            </select>
+          </div>
+
+          <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-success">
+              {{ interventionId ? 'Mettre à jour' : 'Ajouter' }}
+            </button>
+            <button type="button" class="btn btn-danger" (click)="resetForm()">
+              Annuler
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- INTERVENTIONS LIST -->
+    <div *ngIf="affichage === 'liste'" class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Liste des Interventions</h4>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped table-hover">
+            <thead class="table-dark">
+              <tr>
+                <th>Date</th>
+                <th>Coût (€)</th>
+                <th>Statut</th>
+                <th>Technicien</th>
+                <th>Équipement</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let intervention of interventions">
+                <td>{{ intervention.date | date:'dd/MM/yyyy' }}</td>
+                <td>{{ intervention.cout }} €</td>
+                <td>
+                  <span class="badge" [ngClass]="{
+                    'bg-warning': intervention.statut === 'Planifiee',
+                    'bg-info': intervention.statut === 'EnCours',
+                    'bg-success': intervention.statut === 'Terminee'
+                  }">
+                    {{ intervention.statut }}
+                  </span>
+                </td>
+                <td>{{ intervention.technicien?.nom }}</td>
+                <td>{{ intervention.equipement?.nom }}</td>
+                <td>
+                  <div class="d-flex gap-2">
+                    <button class="btn btn-warning btn-sm" 
+                            (click)="loadInterventionToModify(intervention.id, intervention)">
+                      <i class="bi bi-pencil"></i> Modifier
+                    </button>
+                    <button class="btn btn-danger btn-sm" 
+                            (click)="supprimerIntervention(intervention.id)">
+                      <i class="bi bi-trash"></i> Supprimer
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TECHNICIAN VIEW -->
+  <div *ngIf="role === 'TECHNICIEN'" class="card">
+    <div class="card-header">
+      <h4>Mes Interventions</h4>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th>Date</th>
+              <th>Coût (€)</th>
+              <th>Statut</th>
+              <th>Équipement</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let intervention of interventions">
+              <td>{{ intervention.date | date:'dd/MM/yyyy' }}</td>
+              <td>{{ intervention.cout }} €</td>
+              <td>
+                <span class="badge" [ngClass]="{
+                  'bg-warning': intervention.statut === 'Planifiee',
+                  'bg-info': intervention.statut === 'EnCours',
+                  'bg-success': intervention.statut === 'Terminee'
+                }">
+                  {{ intervention.statut }}
+                </span>
+              </td>
+              <td>{{ intervention.equipement?.nom }}</td>
+              <td>
+                <button class="btn btn-warning btn-sm" 
+                        (click)="loadInterventionToModify(intervention.id, intervention)">
+                  <i class="bi bi-pencil"></i> Modifier
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
