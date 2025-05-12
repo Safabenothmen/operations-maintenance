@@ -42,16 +42,21 @@ public Panne ajouterPanne(int equipementId, Panne panne) {
 
 //modifer 
 public Panne modifierPanne(int id, Panne nouvellePanne) {
-    return panneRepository.findById(id)
-            .map(panne -> {  // Si l'objet est présent, on l'update
-                panne.setDescription(nouvellePanne.getDescription());
-                panne.setCategorie(nouvellePanne.getCategorie());
-                panne.setDate_sign(nouvellePanne.getDate_sign());
-                panne.setEquipement(nouvellePanne.getEquipement());
-                return panneRepository.save(panne);  // On sauvegarde et retourne l'entité modifiée
-            })
-            .orElseThrow(() -> new RuntimeException("Panne non trouvée avec l'ID : " + id)); 
+    Panne existing = panneRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Panne non trouvée"));
+
+    existing.setCategorie(nouvellePanne.getCategorie());
+    existing.setDescription(nouvellePanne.getDescription());
+    existing.setDate_sign(nouvellePanne.getDate_sign());
+
+    // Si tu veux garder ou modifier l'équipement associé :
+    if (nouvellePanne.getEquipement() != null) {
+        existing.setEquipement(nouvellePanne.getEquipement());
+    }
+
+    return panneRepository.save(existing);
 }
+
 
 
 //supprimer

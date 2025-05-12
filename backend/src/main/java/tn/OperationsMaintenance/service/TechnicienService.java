@@ -6,9 +6,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import tn.OperationsMaintenance.entity.Intervention;
 import tn.OperationsMaintenance.entity.Technicien;
 import tn.OperationsMaintenance.entity.User;
 import tn.OperationsMaintenance.entity.User.Role;
+import tn.OperationsMaintenance.repository.InterventionRepository;
 //import tn.OperationsMaintenance.entity.User.Role;
 import tn.OperationsMaintenance.repository.TechnicienRepository;
 import tn.OperationsMaintenance.repository.UserRepository;
@@ -18,8 +20,8 @@ private TechnicienRepository technicienRepository;
 @Autowired
 
 private UserRepository userRepository;
-
-
+private InterventionRepository interventionRepository;
+ 
 //ajout technicien 
 
 public Technicien ajouterTechnicien(Technicien technicien) {
@@ -53,15 +55,29 @@ public List<Technicien> getTechniciensDisponibles(){
 
 
 //modifier techncien
- public Technicien modifierTechnicien(int id ,Technicien newTechnicien) {
-	 
-     Technicien technicien = technicienRepository.findById(id)
-             .orElseThrow(() -> new RuntimeException("Technicien non trouvé"));
-			 technicien.setCompetences(newTechnicien.getCompetences());
-			 technicien.setDisponibilite(newTechnicien.getDisponibilite());
-		        return technicienRepository.save(technicien);
+public Intervention modifierIntervention(int id, Intervention interventionModifiee) {
+    Intervention interventionExistante = interventionRepository.findById(id).orElse(null);
+    if (interventionExistante == null) {
+        return null;
+    }
 
- }
+    // Mise à jour des champs modifiables
+    interventionExistante.setDate(interventionModifiee.getDate());
+    interventionExistante.setCout(interventionModifiee.getCout());
+    interventionExistante.setStatut(interventionModifiee.getStatut());
+    interventionExistante.setEquipement(interventionModifiee.getEquipement());
+    interventionExistante.setTechnicien(interventionModifiee.getTechnicien());
+
+    return interventionRepository.save(interventionExistante);
+}
+
+
+
+public Object modifierTechnicien(int id, Technicien technicien) {
+	// TODO Auto-generated method stub
+	return null;
+}
+
  
 
 }

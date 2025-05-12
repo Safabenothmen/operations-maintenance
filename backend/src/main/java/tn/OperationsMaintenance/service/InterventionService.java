@@ -1,5 +1,6 @@
 package tn.OperationsMaintenance.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,8 +45,43 @@ public class InterventionService {
             throw new RuntimeException("Équipement ou Technicien non trouvé.");
         }
     }
+    public List<Intervention> getInterventionsByTechnicien(int technicienId) {
+        return interventionRepository.findByTechnicienId(technicienId); 
+    }
+
+    //modifier intervention 
     
-    
+    public Intervention modifierIntervention(int interventionId, Intervention intervention) {
+        // Chercher l'intervention existante par son ID
+        Optional<Intervention> interventionExistanteOpt = interventionRepository.findById(interventionId);
+        
+        // Si l'intervention existe
+        if (interventionExistanteOpt.isPresent()) {
+            Intervention interventionExistante = interventionExistanteOpt.get();
+            
+            // Mettre à jour les propriétés de l'intervention
+            
+            interventionExistante.setStatut(intervention.getStatut());
+            interventionExistante.setDate(intervention.getDate());
+            interventionExistante.setCout(intervention.getCout());
+            
+            // Sauvegarder et retourner l'intervention mise à jour
+            return interventionRepository.save(interventionExistante);
+        } else {
+            return null; // Retourne null si l'intervention n'est pas trouvée
+        }
+    }
+    public void deleteIntervention(int id) {
+        if (!interventionRepository.existsById(id)) {
+            throw new EntityNotFoundException("Intervention introuvable avec l'id : " + id);
+        }
+        interventionRepository.deleteById(id);
+    }
+
+    public List<Intervention> getAllInterventions() {
+        return interventionRepository.findAll();
+    }
+
     
 }
 

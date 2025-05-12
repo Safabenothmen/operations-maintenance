@@ -3,6 +3,7 @@ package tn.OperationsMaintenance.entity;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
@@ -25,12 +26,12 @@ private int id;
 
 @ManyToOne
 @JoinColumn(name="idEquipement")
-@JsonBackReference("equipement-interventions")
+@JsonIgnoreProperties("interventions")
 private Equipement equipement;
 
 @ManyToOne
 @JoinColumn(name = "idTechnicien", referencedColumnName = "id")
-@JsonBackReference("technicien-interventions")
+@JsonIgnoreProperties("interventions")
 private Technicien technicien ;
 
 

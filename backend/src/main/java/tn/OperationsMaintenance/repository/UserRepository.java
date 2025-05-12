@@ -11,5 +11,7 @@ import tn.OperationsMaintenance.entity.User;
 public interface UserRepository extends JpaRepository <User,Integer>{
     List<User> findByRole(User.Role role);
 
+	User findByEmail(String email);
+
 
 }

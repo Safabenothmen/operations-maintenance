@@ -27,7 +27,7 @@ public class Technicien extends User {
     private Boolean disponibilite;
 	
     @OneToMany(mappedBy = "technicien", cascade = CascadeType.REMOVE, orphanRemoval = true)
-	@JsonManagedReference("technicien-interventions")
+	//@JsonManagedReference("technicien-interventions")
 
 	private List<Intervention> interventions=new ArrayList<>();
 }

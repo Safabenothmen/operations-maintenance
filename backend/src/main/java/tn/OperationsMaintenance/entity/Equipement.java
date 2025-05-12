@@ -28,7 +28,7 @@ private int id;
 
     private List<Panne> pannes = new ArrayList<>();
 	@OneToMany(mappedBy ="equipement")
-	@JsonManagedReference("equipement-interventions")
+	//@JsonManagedReference("equipement-interventions")
 
 	private List<Intervention> interventions=new ArrayList<>();
 	public enum Etat{
