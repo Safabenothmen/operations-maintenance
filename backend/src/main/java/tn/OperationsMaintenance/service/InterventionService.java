@@ -116,6 +116,16 @@ public class InterventionService {
                                 equipementRepository.save(equipement); 
                             }
                         }
+                        
+                        
+                        if (statutEnum == Intervention.Statut.En_cours) {
+                            User technicien = intervention.getTechnicien();
+                            if (technicien instanceof Technicien) {
+                                ((Technicien) technicien).setDisponibilite(false);
+                                userRepository.save(technicien);
+                            }
+                        }
+                        
                         return interventionRepository.save(intervention);
                     })
                     .orElse(null);
