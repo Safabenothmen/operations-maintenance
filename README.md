@@ -8,7 +8,7 @@ Elle permet d'organiser les tâches, planifier les interventions, suivre l'état
 L'objectif principal du projet est d'améliorer l'efficacité des équipes de maintenance en offrant une interface claire, réactive et facile à utiliser.
 
 ## 🚀 Fonctionnalités clés
-
+- 📊Tableau de bord 
 - 📅 Planification des interventions de maintenance
 - 🛠️ Gestion des équipements et des tâches associées
 - 🧑‍🔧 Suivi des techniciens et de leurs actions
@@ -28,7 +28,7 @@ Le projet a été réalisé avec les technologies suivantes :
 ### Outils et autres
 
 - **Node.js** & **npm** : Pour la gestion des dépendances et le serveur de développement.
-- **Git** & **GitHub** : Pour le versioning et la collaboration.
+-  **GitHub** : Pour le versioning et la collaboration.
 - **Visual Studio Code** : Éditeur principal utilisé durant le développement.
 
 ## 📦 Installation locale
