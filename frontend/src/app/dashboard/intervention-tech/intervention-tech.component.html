@@ -1,0 +1,52 @@
+<div class="container">
+  <h2>Mes Interventions</h2>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Équipement</th>
+        <th>Date</th>
+        <th>Statut</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let intervention of interventions">
+        <td>{{ intervention.equipement?.nom }}</td>
+        <td>{{ intervention.date | date }}</td>
+        <td>{{ intervention.statut }}</td>
+        <td>
+          <button class="btn btn-primary" (click)="selectIntervention(intervention)">
+            Modifier Statut
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Modal de modification -->
+  <div *ngIf="selectedIntervention" class="modal" style="display: block; background: rgba(0,0,0,0.5)">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Modifier Statut</h5>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Nouveau Statut:</label>
+            <select class="form-control" [(ngModel)]="newStatus">
+              <option value="Planifiee">Planifiée</option>
+              <option value="En_cours">En cours</option>
+              <option value="Terminee">Terminée</option>
+              <option value="Annulee">Annulée</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="selectedIntervention = null">Annuler</button>
+          <button class="btn btn-primary" (click)="updateStatus()">Enregistrer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

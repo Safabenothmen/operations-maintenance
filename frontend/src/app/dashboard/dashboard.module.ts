@@ -9,6 +9,8 @@ import { LayoutsComponent } from './layouts/layouts.component';
 import { HomeComponent } from './home/home.component';
 import { InterventionComponent } from './intervention/intervention.component';
 import { PanneComponent } from './panne/panne.component';
+import { EmployeComponent } from './employe/employe.component';
+import { InterventionTechComponent } from './intervention-tech/intervention-tech.component';
 @NgModule({
   declarations: [
     EquipementComponent,
@@ -16,7 +18,9 @@ import { PanneComponent } from './panne/panne.component';
     HomeComponent,
     TechnicienComponent,
     InterventionComponent,
-    PanneComponent
+    PanneComponent,
+    EmployeComponent,
+    InterventionTechComponent
   ],
   imports: [
     CommonModule,

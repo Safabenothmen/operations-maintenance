@@ -6,7 +6,7 @@ export interface Technicien {
   id?: number;
   nom: string;
   email: string;
-  mdp: string;
+  motDePasse: string;
   competences: string;
   disponibilite: boolean;
 }
@@ -35,7 +35,7 @@ export class TechnicienService {
   }
 
   modifierTechnicien(id: number, technicien: Technicien): Observable<Technicien> {
-    return this.http.put<Technicien>(`${this.baseUrl}/Modifiertechnicien/${id}`, technicien);
+return this.http.put<Technicien>(`${this.baseUrl}/modifierTechnicien/${id}`, technicien);
   }
 
   getTechniciensDisponibles(): Observable<Technicien[]> {

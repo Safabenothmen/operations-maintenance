@@ -10,13 +10,10 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./technicien.component.css']
 })
 export class TechnicienComponent implements OnInit {
-
   techniciens: Technicien[] = [];
-  newTechnicien: Technicien = { nom: '', email: '', mdp: '', competences: '', disponibilite: true };
-  loading: boolean = false;
-  errorMessage: string = '';
-
-  affichage: 'ajouter' | 'liste' = 'ajouter'; // Par défaut on affiche le formulaire
+  newTechnicien: Technicien = { nom: '', email: '', motDePasse: '', disponibilite: true, competences: '' };
+  editMode: boolean = false;
+  editedTechnicienId: number | null = null;
 
   constructor(private technicienService: TechnicienService) {}
 
@@ -25,56 +22,41 @@ export class TechnicienComponent implements OnInit {
   }
 
   getAllTechniciens(): void {
-    this.loading = true;
-    this.technicienService.getAllTechniciens().subscribe(
-      (data) => {
-        this.techniciens = data;
-        this.loading = false;
-      },
-      (error) => {
-        this.errorMessage = 'Erreur lors de la récupération des techniciens';
-        console.error(error);
-        this.loading = false;
-      }
-    );
+    this.technicienService.getAllTechniciens().subscribe(data => {
+      this.techniciens = data;
+    });
   }
 
-  ajouterTechnicien(): void {
-    this.technicienService.ajouterTechnicien(this.newTechnicien).subscribe(
-      (data) => {
-        this.techniciens.push(data);
-        this.newTechnicien = { nom: '', email: '', mdp: '', competences: '', disponibilite: true };
-        this.affichage = 'liste'; // Rediriger vers la liste après ajout
-      },
-      (error) => {
-        this.errorMessage = 'Erreur lors de l\'ajout du technicien';
-        console.error(error);
-      }
-    );
+  ajouterOuModifierTechnicien(): void {
+    if (this.editMode && this.editedTechnicienId !== null) {
+      this.technicienService.modifierTechnicien(this.editedTechnicienId, this.newTechnicien).subscribe(updated => {
+        const index = this.techniciens.findIndex(t => t.id === this.editedTechnicienId);
+        if (index !== -1) this.techniciens[index] = updated;
+        this.resetForm();
+      });
+    } else {
+      this.technicienService.ajouterTechnicien(this.newTechnicien).subscribe(created => {
+        this.techniciens.push(created);
+        this.resetForm();
+      });
+    }
+  }
+
+  chargerPourModification(technicien: Technicien): void {
+    this.newTechnicien = { ...technicien };
+    this.editedTechnicienId = technicien.id!;
+    this.editMode = true;
   }
 
   supprimerTechnicien(id: number): void {
-    this.technicienService.supprimerTechnicien(id).subscribe(
-      () => {
-        this.techniciens = this.techniciens.filter(t => t.id !== id);
-      },
-      (error) => {
-        this.errorMessage = 'Erreur lors de la suppression du technicien';
-        console.error(error);
-      }
-    );
+    this.technicienService.supprimerTechnicien(id).subscribe(() => {
+      this.techniciens = this.techniciens.filter(t => t.id !== id);
+    });
   }
 
-  modifierTechnicien(id: number): void {
-    this.technicienService.modifierTechnicien(id, this.newTechnicien).subscribe(
-      (data) => {
-        const index = this.techniciens.findIndex(t => t.id === id);
-        if (index !== -1) this.techniciens[index] = data;
-      },
-      (error) => {
-        this.errorMessage = 'Erreur lors de la mise à jour du technicien';
-        console.error(error);
-      }
-    );
+  resetForm(): void {
+    this.newTechnicien = { nom: '', email: '', motDePasse: '', disponibilite: true, competences: '' };
+    this.editMode = false;
+    this.editedTechnicienId = null;
   }
 }

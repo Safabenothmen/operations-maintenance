@@ -15,8 +15,13 @@
           </a>
           <!-- Menu: main ul -->
           <ul class="menu-list flex-grow-1 mt-3">
-              <li *ngIf="roleUtilisateur === 'ADMIN' || roleUtilisateur === 'TECHNICIEN'">
+              <li *ngIf="roleUtilisateur === 'ADMIN' ">
   <a class="m-link" [routerLink]="['/dashboard/intervention']">
+    <i class="icofont-ui-home"></i><span>Intervention</span>
+  </a>
+</li>
+        <li *ngIf="roleUtilisateur === 'TECHNICIEN' ">
+  <a class="m-link" [routerLink]="['/dashboard/interventionTech']">
     <i class="icofont-ui-home"></i><span>Intervention</span>
   </a>
 </li>
@@ -27,6 +32,7 @@
   </a>
 </li>
 
+
 <li *ngIf="roleUtilisateur === 'ADMIN'">
   <a class="m-link" [routerLink]="['/dashboard/technicien']">
     <i class="icofont-ui-home"></i><span>Technicien</span>
@@ -36,6 +42,11 @@
 <li *ngIf="roleUtilisateur === 'ADMIN'">
   <a class="m-link" [routerLink]="['/dashboard/equipement']">
     <i class="icofont-ui-home"></i><span>Equipement</span>
+  </a>
+</li>
+<li *ngIf="roleUtilisateur === 'ADMIN'">
+  <a class="m-link" [routerLink]="['/dashboard/employe']">
+    <i class="icofont-ui-home"></i><span>Employe</span>
   </a>
 </li>
 

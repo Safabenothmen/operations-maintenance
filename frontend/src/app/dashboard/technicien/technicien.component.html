@@ -1,102 +1,57 @@
 <div class="container mt-4">
-  <!-- Error Message -->
-  <div *ngIf="errorMessage" class="alert alert-danger">
-    {{ errorMessage }}
-  </div>
+  <h2>Liste des techniciens</h2>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Email</th>
+        <th>Compétences</th>
+        <th>Disponibilité</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let technicien of techniciens">
+        <td>{{ technicien.nom }}</td>
+        <td>{{ technicien.email }}</td>
+        <td>{{ technicien.competences }}</td>
+        <td>{{ technicien.disponibilite ? 'Oui' : 'Non' }}</td>
+        <td>
+          <button class="btn btn-warning btn-sm" (click)="chargerPourModification(technicien)">Modifier</button>
+          <button class="btn btn-danger btn-sm" (click)="supprimerTechnicien(technicien.id!)">Supprimer</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-  <!-- Loading Indicator -->
-  <div *ngIf="loading" class="text-center">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Loading...</span>
+  <h2 class="mt-5">{{ editMode ? 'Modifier le' : 'Ajouter un' }} technicien</h2>
+  <form (ngSubmit)="ajouterOuModifierTechnicien()">
+    <div class="mb-3">
+      <label>Nom :</label>
+      <input type="text" class="form-control" [(ngModel)]="newTechnicien.nom" name="nom" required>
     </div>
-  </div>
-
-  <!-- Toggle between Add Form and List -->
-  <div class="mb-3">
-    <button class="btn btn-primary me-2" (click)="affichage = 'ajouter'" [class.active]="affichage === 'ajouter'">
-      Ajouter un Technicien
+    <div class="mb-3">
+      <label>Email :</label>
+      <input type="email" class="form-control" [(ngModel)]="newTechnicien.email" name="email" required>
+    </div>
+    <div class="mb-3">
+      <label>Mot de passe :</label>
+      <input type="password" class="form-control" [(ngModel)]="newTechnicien.motDePasse" name="motDePasse" [required]="!editMode">
+    </div>
+    <div class="mb-3">
+      <label>Compétences :</label>
+      <input type="text" class="form-control" [(ngModel)]="newTechnicien.competences" name="competences">
+    </div>
+    <div class="mb-3">
+      <label>Disponibilité :</label>
+      <select class="form-control" [(ngModel)]="newTechnicien.disponibilite" name="disponibilite">
+        <option [ngValue]="true">Disponible</option>
+        <option [ngValue]="false">Indisponible</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-success">
+      {{ editMode ? 'Mettre à jour' : 'Ajouter' }}
     </button>
-    <button class="btn btn-secondary" (click)="affichage = 'liste'" [class.active]="affichage === 'liste'">
-      Voir la Liste
-    </button>
-  </div>
-
-  <!-- Add Technicien Form -->
-  <div *ngIf="affichage === 'ajouter'" class="card mb-4">
-    <div class="card-header">
-      <h4>Ajouter un Technicien</h4>
-    </div>
-    <div class="card-body">
-      <form (ngSubmit)="ajouterTechnicien()">
-        <div class="mb-3">
-          <label for="nom" class="form-label">Nom</label>
-          <input type="text" class="form-control" id="nom" 
-                 [(ngModel)]="newTechnicien.nom" name="nom" required>
-        </div>
-        <div class="mb-3">
-          <label for="email" class="form-label">Email</label>
-          <input type="email" class="form-control" id="email" 
-                 [(ngModel)]="newTechnicien.email" name="email" required>
-        </div>
-        <div class="mb-3">
-          <label for="mdp" class="form-label">Mot de passe</label>
-          <input type="password" class="form-control" id="mdp" 
-                 [(ngModel)]="newTechnicien.mdp" name="mdp" required>
-        </div>
-        <div class="mb-3">
-          <label for="competences" class="form-label">Compétences</label>
-          <textarea class="form-control" id="competences" 
-                   [(ngModel)]="newTechnicien.competences" name="competences" rows="3"></textarea>
-        </div>
-        <div class="mb-3 form-check">
-          <input type="checkbox" class="form-check-input" id="disponibilite" 
-                 [(ngModel)]="newTechnicien.disponibilite" name="disponibilite">
-          <label class="form-check-label" for="disponibilite">Disponible</label>
-        </div>
-        <button type="submit" class="btn btn-success">Ajouter</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Techniciens List -->
-  <div *ngIf="affichage === 'liste'" class="card">
-    <div class="card-header">
-      <h4>Liste des Techniciens</h4>
-    </div>
-    <div class="card-body">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nom</th>
-            <th>Email</th>
-            <th>Compétences</th>
-            <th>Disponibilité</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let technicien of techniciens">
-            <td>{{ technicien.id }}</td>
-            <td>{{ technicien.nom }}</td>
-            <td>{{ technicien.email }}</td>
-            <td>{{ technicien.competences }}</td>
-            <td>
-              <span class="badge" [ngClass]="technicien.disponibilite ? 'bg-success' : 'bg-danger'">
-                {{ technicien.disponibilite ? 'Disponible' : 'Indisponible' }}
-              </span>
-            </td>
-            <td>
-              <button class="btn btn-sm btn-warning me-2" (click)="modifierTechnicien(technicien.id!)">
-                Modifier
-              </button>
-              <button class="btn btn-sm btn-danger" (click)="supprimerTechnicien(technicien.id!)">
-                Supprimer
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+    <button type="button" class="btn btn-secondary ms-2" (click)="resetForm()" *ngIf="editMode">Annuler</button>
+  </form>
 </div>

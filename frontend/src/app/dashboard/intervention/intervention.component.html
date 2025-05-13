@@ -47,8 +47,10 @@
             <label for="statut" class="form-label">Statut</label>
             <select class="form-select" [(ngModel)]="intervention.statut" name="statut" required>
               <option value="Planifiee">Planifiée</option>
-              <option value="EnCours">En Cours</option>
+              <option value="En_cours">En Cours</option>
               <option value="Terminee">Terminée</option>
+              <option value="Annulee">Annulee</option>
+
             </select>
           </div>
 
@@ -117,47 +119,5 @@
     </div>
   </div>
 
-  <!-- TECHNICIAN VIEW -->
-  <div *ngIf="role === 'TECHNICIEN'" class="card">
-    <div class="card-header">
-      <h4>Mes Interventions</h4>
-    </div>
-    <div class="card-body">
-      <div class="table-responsive">
-        <table class="table table-striped table-hover">
-          <thead class="table-dark">
-            <tr>
-              <th>Date</th>
-              <th>Coût (€)</th>
-              <th>Statut</th>
-              <th>Équipement</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let intervention of interventions">
-              <td>{{ intervention.date | date:'dd/MM/yyyy' }}</td>
-              <td>{{ intervention.cout }} €</td>
-              <td>
-                <span class="badge" [ngClass]="{
-                  'bg-warning': intervention.statut === 'Planifiee',
-                  'bg-info': intervention.statut === 'EnCours',
-                  'bg-success': intervention.statut === 'Terminee'
-                }">
-                  {{ intervention.statut }}
-                </span>
-              </td>
-              <td>{{ intervention.equipement?.nom }}</td>
-              <td>
-                <button class="btn btn-warning btn-sm" 
-                        (click)="loadInterventionToModify(intervention.id, intervention)">
-                  <i class="bi bi-pencil"></i> Modifier
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+  
 </div>

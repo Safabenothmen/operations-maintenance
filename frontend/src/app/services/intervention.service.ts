@@ -34,7 +34,17 @@ export class InterventionService {
       })
     );
   }
+    // Modifier le statut d'une intervention
 
+  modifierStatut(interventionId: number, statut: string): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${interventionId}/statut/${statut}`, {}).pipe(
+      tap(data => console.log('Statut modifié:', data)),
+      catchError(error => {
+        console.error('Erreur lors de la modification du statut:', error);
+        throw error;
+      })
+    );
+  }
 
   // ✅ Supprimer une intervention
   supprimerIntervention(interventionId: number): Observable<any> {

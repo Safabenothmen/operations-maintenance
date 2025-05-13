@@ -1,0 +1,73 @@
+<!-- Barre de boutons -->
+<div class="mb-3">
+  <button class="btn btn-primary me-2" (click)="affichage = 'ajouter'" [class.active]="affichage === 'ajouter'">
+    Ajouter un Employé
+  </button>
+  <button class="btn btn-secondary" (click)="affichage = 'liste'" [class.active]="affichage === 'liste'">
+    Voir la Liste
+  </button>
+</div>
+
+<!-- Formulaire -->
+<div *ngIf="affichage === 'ajouter'" class="card mb-4">
+  <div class="card-header">
+    <h4>Ajouter un Employé</h4>
+  </div>
+  <div class="card-body">
+    <form (ngSubmit)="ajouterEmploye()">
+      <div class="mb-3">
+        <label for="nom" class="form-label">Nom</label>
+        <input type="text" class="form-control" id="nom" [(ngModel)]="newEmploye.nom" name="nom" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" [(ngModel)]="newEmploye.email" name="email" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="mdp" class="form-label">Mot de passe</label>
+        <input type="password" class="form-control" id="mdp" [(ngModel)]="newEmploye.motDePasse" name="mdp" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="DateEmbauche" class="form-label">Date d'embauche</label>
+        <input type="date" class="form-control" id="DateEmbauche" [(ngModel)]="newEmploye.dateEmbauche" name="DateEmbauche" required>
+      </div>
+
+      <button type="submit" class="btn btn-success">Ajouter</button>
+    </form>
+  </div>
+</div>
+
+<!-- Liste des employés -->
+<div *ngIf="affichage === 'liste'" class="card">
+  <div class="card-header">
+    <h4>Liste des Employés</h4>
+  </div>
+  <div class="card-body">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nom</th>
+          <th>Email</th>
+          <th>Date d'embauche</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let e of employes">
+          <td>{{ e.id }}</td>
+          <td>{{ e.nom }}</td>
+          <td>{{ e.email }}</td>
+          <td>{{ e.dateEmbauche | date: 'yyyy-MM-dd' }}</td>
+          <td>
+            <button class="btn btn-sm btn-warning me-2" (click)="modifierEmploye(e.id!)">Modifier</button>
+            <button class="btn btn-sm btn-danger" (click)="supprimerEmploye(e.id!)">Supprimer</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
