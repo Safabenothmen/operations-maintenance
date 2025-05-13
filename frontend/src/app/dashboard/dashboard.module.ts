@@ -2,6 +2,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { NgChartsModule } from 'ng2-charts';
+
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { EquipementComponent } from './equipement/equipement.component';
 import { TechnicienComponent } from './technicien/technicien.component';
@@ -25,7 +28,10 @@ import { InterventionTechComponent } from './intervention-tech/intervention-tech
   imports: [
     CommonModule,
     FormsModule, // Make sure this is here
-    DashboardRoutingModule
+    DashboardRoutingModule,
+        MatCardModule,
+       NgChartsModule
+
   ]
 })
 export class DashboardModule { }

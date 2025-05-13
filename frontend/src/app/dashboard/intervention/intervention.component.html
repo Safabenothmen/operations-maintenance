@@ -89,14 +89,16 @@
                 <td>{{ intervention.date | date:'dd/MM/yyyy' }}</td>
                 <td>{{ intervention.cout }} €</td>
                 <td>
-                  <span class="badge" [ngClass]="{
-                    'bg-warning': intervention.statut === 'Planifiee',
-                    'bg-info': intervention.statut === 'EnCours',
-                    'bg-success': intervention.statut === 'Terminee'
-                  }">
-                    {{ intervention.statut }}
-                  </span>
-                </td>
+  <span class="badge" [ngClass]="{
+    'bg-warning': intervention.statut === 'Planifiee',  
+    'bg-danger': intervention.statut === 'Annulee',   
+    'bg-info': intervention.statut === 'En_cours',     
+    'bg-success': intervention.statut === 'Terminee'   
+  }">
+    {{ intervention.statut }}
+  </span>
+</td>
+
                 <td>{{ intervention.technicien?.nom }}</td>
                 <td>{{ intervention.equipement?.nom }}</td>
                 <td>

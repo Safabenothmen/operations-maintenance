@@ -1,1 +1,31 @@
-<p>home works!</p>
+<div class="dashboard-container">
+  <h2>📊 Tableau de bord</h2>
+
+  <div class="stats-cards">
+    <mat-card class="card">
+      <h3>Total Pannes</h3>
+      <p>{{ stats?.totalPannes }}</p>
+    </mat-card>
+    <mat-card class="card">
+      <h3>En Attente</h3>
+      <p>{{ stats?.pannesEnAttente }}</p>
+    </mat-card>
+    <mat-card class="card">
+      <h3>Résolues</h3>
+      <p>{{ stats?.pannesResolues }}</p>
+    </mat-card>
+    <mat-card class="card">
+      <h3>Équipements</h3>
+      <p>{{ stats?.totalEquipements }}</p>
+    </mat-card>
+  </div>
+
+  <div class="chart-container">
+    <h3>Répartition des Pannes</h3>
+    <canvas baseChart
+      [data]="{ labels: donutChartLabels, datasets: [{ data: donutChartData }] }"
+      [type]="donutChartType"
+      [options]="{ responsive: true, plugins: { legend: { position: 'bottom' } } }">
+    </canvas>
+  </div>
+</div>

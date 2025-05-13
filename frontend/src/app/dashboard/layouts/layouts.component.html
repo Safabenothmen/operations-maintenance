@@ -15,6 +15,11 @@
           </a>
           <!-- Menu: main ul -->
           <ul class="menu-list flex-grow-1 mt-3">
+            <li *ngIf="roleUtilisateur === 'ADMIN'">
+  <a class="m-link" [routerLink]="['/dashboard/']">
+    <i class="icofont-ui-home"></i><span>Home</span>
+  </a>
+</li>
               <li *ngIf="roleUtilisateur === 'ADMIN' ">
   <a class="m-link" [routerLink]="['/dashboard/intervention']">
     <i class="icofont-ui-home"></i><span>Intervention</span>
@@ -44,6 +49,7 @@
     <i class="icofont-ui-home"></i><span>Equipement</span>
   </a>
 </li>
+
 <li *ngIf="roleUtilisateur === 'ADMIN'">
   <a class="m-link" [routerLink]="['/dashboard/employe']">
     <i class="icofont-ui-home"></i><span>Employe</span>

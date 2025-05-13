@@ -1,0 +1,27 @@
+.dashboard-container {
+  padding: 2rem;
+
+  h2 {
+    margin-bottom: 1.5rem;
+  }
+
+  .stats-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .card {
+    text-align: center;
+    padding: 1rem;
+    background: linear-gradient(to bottom right, #eceff1, #f5f5f5);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .chart-container {
+    max-width: 600px;
+    margin: auto;
+  }
+}
