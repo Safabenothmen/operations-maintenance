@@ -1,5 +1,6 @@
 package tn.OperationsMaintenance.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,67 +10,86 @@ import jakarta.persistence.EntityNotFoundException;
 import tn.OperationsMaintenance.entity.Equipement;
 import tn.OperationsMaintenance.entity.Intervention;
 import tn.OperationsMaintenance.entity.Technicien;
-//*import tn.OperationsMaintenance.entity.User;
+import tn.OperationsMaintenance.entity.User;
+import tn.OperationsMaintenance.entity.User.Role;
 import tn.OperationsMaintenance.repository.EquipementRepository;
 import tn.OperationsMaintenance.repository.InterventionRepository;
 import tn.OperationsMaintenance.repository.TechnicienRepository;
 //import tn.OperationsMaintenance.repository.UserRepository;
+import tn.OperationsMaintenance.repository.UserRepository;
 
 @Service
 public class InterventionService {
     
     private final InterventionRepository interventionRepository;
-    private final TechnicienRepository technicienRepository;
+   // private final TechnicienRepository technicienRepository;
+    private final UserRepository userRepository;
     private final EquipementRepository equipementRepository;
 
     @Autowired
     public InterventionService(InterventionRepository interventionRepository, 
-                             TechnicienRepository technicienRepository,
+                            UserRepository userRepository,
                              EquipementRepository equipementRepository
                              ) {
         this.interventionRepository = interventionRepository;
-        this.technicienRepository = technicienRepository;
+        this.userRepository  = userRepository;
         this.equipementRepository = equipementRepository;
     }
     
     
-    public Intervention ajouterIntervention(int equipementId, int technicienId, Intervention intervention) {
-        Optional<Equipement> equipement = equipementRepository.findById(equipementId);
-        Optional<Technicien> technicien = technicienRepository.findById(technicienId);
-
-        if (equipement.isPresent() && technicien.isPresent()) {
-            intervention.setEquipement(equipement.get());
-            intervention.setTechnicien(technicien.get());
-            return interventionRepository.save(intervention);
-        } else {
-            throw new RuntimeException("Équipement ou Technicien non trouvé.");
+    public Intervention createIntervention(int technicienId, int equipementId, Intervention intervention) {
+        User user = userRepository.findById(technicienId)
+            .orElseThrow(() -> new EntityNotFoundException("Utilisateur non trouvé"));
+        
+        // Vérification manuelle du rôle
+        if (user.getRole() != Role.TECHNICIEN) {
+            throw new IllegalArgumentException("L'utilisateur doit être un technicien");
         }
+        
+        Equipement equipement = equipementRepository.findById(equipementId)
+            .orElseThrow(() -> new EntityNotFoundException("Équipement non trouvé"));
+        
+        intervention.setTechnicien(user);
+        intervention.setEquipement(equipement);
+        
+        return interventionRepository.save(intervention);
     }
+
+
+
     public List<Intervention> getInterventionsByTechnicien(int technicienId) {
         return interventionRepository.findByTechnicienId(technicienId); 
     }
 
     //modifier intervention 
     
-    public Intervention modifierIntervention(int interventionId, Intervention intervention) {
-        // Chercher l'intervention existante par son ID
-        Optional<Intervention> interventionExistanteOpt = interventionRepository.findById(interventionId);
-        
-        // Si l'intervention existe
-        if (interventionExistanteOpt.isPresent()) {
-            Intervention interventionExistante = interventionExistanteOpt.get();
-            
-            // Mettre à jour les propriétés de l'intervention
-            
-            interventionExistante.setStatut(intervention.getStatut());
-            interventionExistante.setDate(intervention.getDate());
-            interventionExistante.setCout(intervention.getCout());
-            
-            // Sauvegarder et retourner l'intervention mise à jour
-            return interventionRepository.save(interventionExistante);
-        } else {
-            return null; // Retourne null si l'intervention n'est pas trouvée
-        }
+    public Intervention modifierIntervention(int interventionId, Intervention interventionModifs) {
+        return interventionRepository.findById(interventionId)
+            .map(interventionExistante -> {
+                // Mettre à jour uniquement les champs non-nuls de interventionModifs
+                if (interventionModifs.getTechnicien() != null) {
+                    interventionExistante.setTechnicien(interventionModifs.getTechnicien());
+                }
+                
+                if (interventionModifs.getEquipement() != null) {
+                    interventionExistante.setEquipement(interventionModifs.getEquipement());
+                }
+                
+                if (interventionModifs.getStatut() != null) {
+                    interventionExistante.setStatut(interventionModifs.getStatut());
+                }
+                
+                if (interventionModifs.getDate() != null) {
+                    interventionExistante.setDate(interventionModifs.getDate());
+                }
+                
+                if (interventionModifs.getCout() != 0) { // ou != null si cout est un Float/Double
+                    interventionExistante.setCout(interventionModifs.getCout());
+                }
+                
+                return interventionRepository.save(interventionExistante);
+            })
+            .orElse(null); // Retourne null si l'intervention n'existe pas
     }
     public void deleteIntervention(int id) {
         if (!interventionRepository.existsById(id)) {
@@ -81,50 +101,26 @@ public class InterventionService {
     public List<Intervention> getAllInterventions() {
         return interventionRepository.findAll();
     }
+    public Intervention modifierStatut(int id, String nouveauStatut) {
+        try {
+            Intervention.Statut statutEnum = Intervention.Statut.valueOf(nouveauStatut);
 
-    
+            return interventionRepository.findById(id)
+                    .map(intervention -> {
+                        intervention.setStatut(statutEnum);
+                        return interventionRepository.save(intervention);
+                    })
+                    .orElse(null);
+        } catch (IllegalArgumentException e) {
+            return null; // statut invalide
+        }
+    }
+
+
+
+
 }
 
 
 
-  /*  public Intervention ajoutIntervention(Intervention intervention, int technicienId, int equipementId) {
-        Technicien technicien = technicienRepository.findById(technicienId);
-        if (technicien == null) {
-            throw new EntityNotFoundException("Technicien non trouvé");
-        }
-        intervention.setTechnicien(technicien);
-        
-       Equipement equipement = equipementRepository.findById(equipementId);
-        if (equipement == null) {
-            throw new EntityNotFoundException("Équipement non trouvé");
-        }
-        intervention.setEquipement(equipement);
-        
-        return interventionRepository.save(intervention);
-    }
-    
-    
-    
-    public Intervention updateIntervention(Intervention nvIntervention, int userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("Utilisateur non trouvé"));
-
-        Intervention existIntervention = interventionRepository.findById(nvIntervention.getId())
-                .orElseThrow(() -> new EntityNotFoundException("Intervention non trouvée"));
-
-        if ("Admin".equals(user.getRole())) {
-            if (nvIntervention.getDate() != null) {
-                existIntervention.setDate(nvIntervention.getDate());
-            }
-            if (nvIntervention.getCout() != 0) {
-                existIntervention.setCout(nvIntervention.getCout());
-            }
-        }
-
-        if (nvIntervention.getStatut() != null) {
-            existIntervention.setStatut(nvIntervention.getStatut());
-        }
-
-        return interventionRepository.save(existIntervention);
-    }
-*/
+  

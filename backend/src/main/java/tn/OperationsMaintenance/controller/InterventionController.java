@@ -35,15 +35,16 @@ public InterventionController(InterventionService interventionService) {
 
 //ajout intervention
 @PostMapping("/ajouter/{equipementId}/{technicienId}")
-public ResponseEntity<Intervention> ajouterIntervention(
-        @PathVariable int equipementId,
+public ResponseEntity<Intervention> createIntervention(
         @PathVariable int technicienId,
-        @RequestBody Intervention intervention
-) {
-    Intervention nouvelleIntervention = interventionService.ajouterIntervention(equipementId, technicienId, intervention);
-    return ResponseEntity.ok(nouvelleIntervention);
+        @PathVariable int equipementId,
+        @RequestBody Intervention intervention) {
+    
+    Intervention created = interventionService.createIntervention(
+        technicienId, equipementId, intervention);
+    
+    return ResponseEntity.ok(created);
 }
-
 @GetMapping("/technicien/{technicienId}")
 public ResponseEntity<List<Intervention>> getInterventionsByTechnicien(@PathVariable int technicienId) {
     List<Intervention> interventions = interventionService.getInterventionsByTechnicien(technicienId);
@@ -83,44 +84,28 @@ public ResponseEntity<Void> deleteIntervention(@PathVariable int id) {
 }
 
 
-
-
-/*
-//ajout intervention 
-@PostMapping("/ajout/{technicienId}/{equipementId}")
-public ResponseEntity<Intervention> ajoutIntervention(@RequestBody Intervention intervention, @PathVariable int technicienId,@PathVariable int equipementId) {
-    //TODO: process POST request
-    
-    return ResponseEntity.ok(interventionService.ajoutIntervention(intervention,technicienId,equipementId));
-}*/
-/*
-
-@PutMapping("/modfifer")
-public Intervention updateIntervention(
-        @RequestBody Intervention intervention,
-        @RequestHeader("X-User-Id") int userId) {
-    
-    return interventionService.updateIntervention(intervention, userId);
-}*/
-
-/*@DeleteMapping("/{id}")
-public Intervention deleteIntervention(@PathVariable int id) {
-	interventionService.deleteIntervention(id);
+//modifierstatus 
+@PutMapping("/{id}/statut/{statut}")
+public ResponseEntity<Intervention> modifierStatut(
+        @PathVariable int id,
+        @PathVariable String statut
+) {
+    Intervention intervention = interventionService.modifierStatut(id, statut);
+    if (intervention == null) {
+        return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok(intervention);
 }
 
-@GetMapping("/getall")
-public List<Intervention> getAllInterventions() {
-    return interventionService.getAllInterventions();
-}
-@GetMapping("/techniciens/{technicienId}")
-public List<Intervention> getInterventionsByTechnicien(@PathVariable int technicienId) {
-    return interventionService.getInterventionsByTechnicien(technicienId);
-}
 
-@GetMapping("/techniciens/{equipementId}")
-public List<Intervention> getInterventionsByEquipement(@PathVariable int equipementId) {
-    return interventionService.getInterventionsByTechnicien(equipementId);
-}
 
-*/
+
+
+
+
+
+
+
+
+
 }

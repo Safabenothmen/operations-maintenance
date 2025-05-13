@@ -32,7 +32,7 @@ private Equipement equipement;
 @ManyToOne
 @JoinColumn(name = "idTechnicien", referencedColumnName = "id")
 @JsonIgnoreProperties("interventions")
-private Technicien technicien ;
+private User technicien ;
 
 
 @Enumerated(EnumType.STRING)

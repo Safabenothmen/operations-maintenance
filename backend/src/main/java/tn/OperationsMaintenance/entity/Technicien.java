@@ -20,6 +20,8 @@ import lombok.EqualsAndHashCode;
 
 
 @Data
+@DiscriminatorValue("Technicien")
+
 public class Technicien extends User {
 
 
