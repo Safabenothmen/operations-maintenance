@@ -2,7 +2,7 @@
 
 ## 📌 Description du projet
 
-Operations Maintenance est une application web développée avec Angular, conçue pour faciliter la gestion des opérations de maintenance dans divers environnements industriels ou techniques.  
+Operations Maintenance est une application web développée avec Angular en frontend et springboot en backend , conçue pour faciliter la gestion des opérations de maintenance dans divers environnements industriels ou techniques.  
 Elle permet d'organiser les tâches, planifier les interventions, suivre l'état du matériel et centraliser les informations des opérations passées et à venir.
 
 L'objectif principal du projet est d'améliorer l'efficacité des équipes de maintenance en offrant une interface claire, réactive et facile à utiliser.
