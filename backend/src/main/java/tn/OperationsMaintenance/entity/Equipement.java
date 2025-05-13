@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
@@ -25,6 +26,7 @@ private int id;
 	private Etat etat;
 	@OneToMany(mappedBy="equipement")
 	//@JsonManagedReference("equipement-pannes")
+	@JsonIgnoreProperties("equipement") 
 
     private List<Panne> pannes = new ArrayList<>();
 	@OneToMany(mappedBy ="equipement")

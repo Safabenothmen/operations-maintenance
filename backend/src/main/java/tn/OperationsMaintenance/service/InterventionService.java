@@ -108,6 +108,14 @@ public class InterventionService {
             return interventionRepository.findById(id)
                     .map(intervention -> {
                         intervention.setStatut(statutEnum);
+                        
+                        if (statutEnum == Intervention.Statut.Terminee) {
+                            Equipement equipement = intervention.getEquipement();
+                            if (equipement != null) {
+                                equipement.setEtat(Equipement.Etat.Fonctionnel);
+                                equipementRepository.save(equipement); 
+                            }
+                        }
                         return interventionRepository.save(intervention);
                     })
                     .orElse(null);
