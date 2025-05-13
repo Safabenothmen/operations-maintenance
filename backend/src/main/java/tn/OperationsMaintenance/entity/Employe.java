@@ -12,6 +12,5 @@ import lombok.Data;
 
 public class Employe extends User {
 	private Date DateEmbauche;
-	//nzid controlleur wrepo w service 
 
 }

@@ -1,5 +1,7 @@
 package tn.OperationsMaintenance.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,5 +20,10 @@ public class EmployeService {
 public Employe ajouterEmploye(Employe employe) {
     employe.setRole(User.Role.EMPLOYE); 
     return userRepository.save(employe);
+}
+//liste d'mploye
+public List<User> getAllEmployes() {
+	System.out.println("ROLE ++++ "+ User.Role.EMPLOYE);
+	return userRepository.findByRole(User.Role.EMPLOYE);
 }
 }

@@ -1,9 +1,12 @@
 package tn.OperationsMaintenance.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +32,11 @@ public class EmployeController {
 	public ResponseEntity<User> ajouterEmploye(@RequestBody Employe employe) {
 	    User saved = employeService.ajouterEmploye(employe);
 	    return ResponseEntity.ok(saved);
+	}
+	@GetMapping("/employe")
+	public ResponseEntity<List<User>> getAllEmployes() {
+	    List<User> employe = employeService.getAllEmployes();
+	    return ResponseEntity.ok(employe);
 	}
 
 

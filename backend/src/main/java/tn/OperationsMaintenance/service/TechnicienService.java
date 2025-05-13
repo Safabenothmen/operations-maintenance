@@ -73,11 +73,48 @@ public Intervention modifierIntervention(int id, Intervention interventionModifi
 
 
 
-public Object modifierTechnicien(int id, Technicien technicien) {
-	// TODO Auto-generated method stub
-	return null;
+public User modifierTechnicien(int id, Technicien updatedTech) {
+    // Récupérer l'utilisateur avec l'ID donné
+    User existingUser = userRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
+    // Vérifier si l'utilisateur a bien le rôle TECHNICIEN
+    if (existingUser.getRole() == Role.TECHNICIEN) {
+        // Mettre à jour uniquement les champs non nuls dans le JSON
+        if (updatedTech.getNom() != null) {
+            existingUser.setNom(updatedTech.getNom());
+        }
+        if (updatedTech.getEmail() != null) {
+            existingUser.setEmail(updatedTech.getEmail());
+        }
+        if (updatedTech.getMotDePasse() != null) {
+            existingUser.setMotDePasse(updatedTech.getMotDePasse());
+        }
+
+        // Si l'utilisateur est un technicien, mettre à jour ses informations spécifiques
+        if (existingUser instanceof Technicien) {
+            Technicien technicien = (Technicien) existingUser;
+
+            // Mise à jour de la disponibilité si présente dans le JSON
+            if (updatedTech.getDisponibilite() != null) {
+                technicien.setDisponibilite(updatedTech.getDisponibilite());
+            }
+
+            // Mettre à jour les compétences seulement si elles sont fournies
+            if (updatedTech.getCompetences() != null) {
+                technicien.setCompetences(updatedTech.getCompetences());
+            }
+        }
+
+        // Sauvegarder les modifications dans la base de données
+        return userRepository.save(existingUser);
+    } else {
+        throw new RuntimeException("Cet utilisateur n'est pas un technicien");
+    }
 }
+}
+
 
  
 
-}
+

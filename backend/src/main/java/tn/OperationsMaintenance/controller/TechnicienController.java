@@ -36,10 +36,7 @@ public TechnicienController(TechnicienService technicienService) {
 }
 
 @PostMapping("technicien/ajout")
-//public ResponseEntity<Technicien> AjoutTechnicien(@RequestBody Technicien technicien){
-//return ResponseEntity.ok(technicienService.AjoutTechnicien(technicien));
 
-//}
 
 public ResponseEntity<User> ajouterTechnicien(@RequestBody Technicien technicien) {
     User saved = technicienService.ajouterTechnicien(technicien);
@@ -72,12 +69,12 @@ public ResponseEntity<List<Technicien>> getTechniciensDisponibles() {
     return ResponseEntity.ok(technicienService.getTechniciensDisponibles());
 }
 //modifieTechncien
-@PutMapping("/Modifiertechnicien/{id}")
-public ResponseEntity<Technicien> modifierTechnicien(@PathVariable int id, @RequestBody Technicien technicien) {
-    //TODO: process PUT request
-	return ResponseEntity.ok(technicienService.modifierTechnicien(id, technicien));
-    
+@PutMapping("/modifierTechnicien/{id}")
+public ResponseEntity<User> modifierTechnicien(@PathVariable int id, @RequestBody Technicien updatedTech) {
+    User utilisateurModifie = technicienService.modifierTechnicien(id, updatedTech);
+    return ResponseEntity.ok(utilisateurModifie);
 }
+
 
 
 
