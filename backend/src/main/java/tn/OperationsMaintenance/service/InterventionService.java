@@ -41,7 +41,6 @@ public class InterventionService {
         User user = userRepository.findById(technicienId)
             .orElseThrow(() -> new EntityNotFoundException("Utilisateur non trouvé"));
         
-        // Vérification manuelle du rôle
         if (user.getRole() != Role.TECHNICIEN) {
             throw new IllegalArgumentException("L'utilisateur doit être un technicien");
         }

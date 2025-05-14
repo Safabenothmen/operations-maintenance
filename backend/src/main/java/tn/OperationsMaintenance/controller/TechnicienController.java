@@ -70,10 +70,11 @@ public ResponseEntity<List<Technicien>> getTechniciensDisponibles() {
 }
 //modifieTechncien
 @PutMapping("/modifierTechnicien/{id}")
-public ResponseEntity<User> modifierTechnicien(@PathVariable int id, @RequestBody Technicien updatedTech) {
-    User utilisateurModifie = technicienService.modifierTechnicien(id, updatedTech);
+public ResponseEntity<Technicien> modifierTechnicien(@PathVariable int id, @RequestBody Technicien updatedTech) {
+    Technicien utilisateurModifie = (Technicien) technicienService.modifierTechnicien(id, updatedTech);
     return ResponseEntity.ok(utilisateurModifie);
 }
+
 
 
 

@@ -55,32 +55,16 @@ public List<Technicien> getTechniciensDisponibles(){
 
 
 //modifier techncien
-public Intervention modifierIntervention(int id, Intervention interventionModifiee) {
-    Intervention interventionExistante = interventionRepository.findById(id).orElse(null);
-    if (interventionExistante == null) {
-        return null;
-    }
 
-    // Mise à jour des champs modifiables
-    interventionExistante.setDate(interventionModifiee.getDate());
-    interventionExistante.setCout(interventionModifiee.getCout());
-    interventionExistante.setStatut(interventionModifiee.getStatut());
-    interventionExistante.setEquipement(interventionModifiee.getEquipement());
-    interventionExistante.setTechnicien(interventionModifiee.getTechnicien());
-
-    return interventionRepository.save(interventionExistante);
-}
 
 
 
 public User modifierTechnicien(int id, Technicien updatedTech) {
-    // Récupérer l'utilisateur avec l'ID donné
     User existingUser = userRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
 
     // Vérifier si l'utilisateur a bien le rôle TECHNICIEN
     if (existingUser.getRole() == Role.TECHNICIEN) {
-        // Mettre à jour uniquement les champs non nuls dans le JSON
         if (updatedTech.getNom() != null) {
             existingUser.setNom(updatedTech.getNom());
         }
@@ -91,16 +75,13 @@ public User modifierTechnicien(int id, Technicien updatedTech) {
             existingUser.setMotDePasse(updatedTech.getMotDePasse());
         }
 
-        // Si l'utilisateur est un technicien, mettre à jour ses informations spécifiques
         if (existingUser instanceof Technicien) {
             Technicien technicien = (Technicien) existingUser;
 
-            // Mise à jour de la disponibilité si présente dans le JSON
             if (updatedTech.getDisponibilite() != null) {
                 technicien.setDisponibilite(updatedTech.getDisponibilite());
             }
 
-            // Mettre à jour les compétences seulement si elles sont fournies
             if (updatedTech.getCompetences() != null) {
                 technicien.setCompetences(updatedTech.getCompetences());
             }
